@@ -1,4 +1,14 @@
 #!/bin/bash
 
-echo "actualizing mirror list and ranking speed"
+echo "actualizing mirror list and ranking speed..."
+echo "Downloading mirrors by https://www.archlinux.org/mirrorlist/all/..."
+
+curl -o mirrorListDownloaded https://www.archlinux.org/mirrorlist/?country=all&protocol=http&protocol=https&ip_version=4&use_mirror_status=on
+
+wait
+
+echo "Removing \# from downloaded archive"
+sed -i 's/^#Server/Server/' mirrorListDownloaded
+
+
 
