@@ -1,14 +1,32 @@
 #!/bin/bash
 
-echo "actualizing mirror list and ranking speed..."
-echo "Downloading mirrors by https://www.archlinux.org/mirrorlist/all/..."
+if [ "$(id -u)" -ne 0 ]
+then
+	echo "Please run as root";
+	exit 1;
+fi
+
+echo -e "\nActualizing mirror list and ranking speed..."
+echo -e "Downloading mirrors by https://www.archlinux.org/mirrorlist/all/...\n"
 
 curl -o mirrorListDownloaded https://www.archlinux.org/mirrorlist/?country=all&protocol=http&protocol=https&ip_version=4&use_mirror_status=on
 
 wait
 
-echo "Removing \# from downloaded archive"
+echo -e "\nRemoving \# from downloaded archive..."
 sed -i 's/^#Server/Server/' mirrorListDownloaded
+
+echo -e "\nranking 10 bests mirrors... It will take a long time"
+rankmirrors -n 10 mirrorListDownloaded > newMirrorList
+
+wait
+
+mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
+mv newMirrorList /etc/pacman.d/mirrorlist
+
+rm mirrorListDownloaded
+
+pacman -Syyu
 
 
 
