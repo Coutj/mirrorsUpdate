@@ -17,7 +17,7 @@ echo -e "\nRemoving \# from downloaded archive..."
 sed -i 's/^#Server/Server/' mirrorListDownloaded
 
 echo -e "\nranking 10 bests mirrors... It will take a long time"
-rankmirrors -nv 10 mirrorListDownloaded > newMirrorList
+rankmirrors -nv 20 mirrorListDownloaded > newMirrorList
 
 wait
 
